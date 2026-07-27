@@ -1,0 +1,25 @@
+gates:
+  tasa_normalizacion:
+    operador: ">="
+    umbral: 0.70
+    bloqueante: true
+  tasa_duplicados:
+    operador: "<="
+    umbral: 0.0
+    bloqueante: true
+  tasa_nulos_criticos:
+    operador: "<="
+    umbral: 0.0
+    bloqueante: true
+  cobertura_clientes:
+    operador: ">="
+    umbral: 0.60
+    bloqueante: true
+  tasa_apto_contacto:
+    operador: ">="
+    umbral: 0.40
+    bloqueante: false
+  tasa_moviles:
+    operador: ">="
+    umbral: 0.50
+    bloqueante: false

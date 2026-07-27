@@ -1,0 +1,12 @@
+cliente_id,nombre,telefono_movil,telefono_fijo,ciudad,updated_at
+C001,Ana Restrepo,300 123 4567,(604) 444 5566,Medellín,2026-05-02
+C002,Bruno Salgado,+57 310-987-6543,,Bogotá,2026-04-11
+C003,Carla Méndez,3229876543 ext 12,6013334455,Bogotá,2026-06-01
+C004,Diego Ospina,300000000,,Cali,2026-03-20
+C005,Elena Ruiz,+52 55 1234 5678,,CDMX,2026-05-18
+C006,Felipe Cano,0000000000,,Cali,2026-01-05
+C007,Gabriela Torres,+1 (415) 555-2671,,San Francisco,2026-02-27
+C008,Hugo Lara,no tiene,,Pereira,2026-04-02
+C009,Irene Pardo,+57 3151112233,+57 3151112233,Cartagena,2026-06-10
+C010,Jorge Villa,+44 20 7946 0958,,Londres,2026-05-30
+C012,Laura Gil,315 111 2244,,Bogotá,2026-05-01

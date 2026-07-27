@@ -1,0 +1,40 @@
+gates:
+  tasa_normalizacion:
+    operador: ">="
+    umbral: 0.90
+    bloqueante: true
+    descripcion: "% de teléfonos candidatos que llegan a E.164 válido"
+
+  tasa_duplicados:
+    operador: "<="
+    umbral: 0.0
+    bloqueante: true
+    descripcion: "duplicados (cliente_id, e164) tras la deduplicación"
+
+  tasa_nulos_criticos:
+    operador: "<="
+    umbral: 0.0
+    bloqueante: true
+    descripcion: "nulos en llaves de negocio"
+
+  cobertura_clientes:
+    operador: ">="
+    umbral: 0.70
+    bloqueante: true
+    descripcion: "% de clientes con al menos un teléfono utilizable"
+
+  tasa_apto_contacto:
+    operador: ">="
+    umbral: 0.40
+    bloqueante: false
+    descripcion: "% con base legal vigente; informativo, depende del negocio"
+
+  tasa_moviles:
+    operador: ">="
+    umbral: 0.50
+    bloqueante: false
+    descripcion: "mezcla de líneas móviles (relevante para SMS/WhatsApp)"
+
+deriva:
+  variacion_volumen_max: 0.15
+  caida_normalizacion_max: 0.03

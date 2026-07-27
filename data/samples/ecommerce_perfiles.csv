@@ -1,0 +1,8 @@
+cliente_id,email,celular_checkout,ultima_compra
+C001,ana@example.com,+573001234567,2026-06-15
+C002,bruno@example.com,3109876543,2026-05-22
+C003,carla@example.com,322 987 6543,2026-06-02
+C005,elena@example.com,+525512345678,2026-04-19
+C009,irene@example.com,315 111 2233,2026-06-11
+C011,karla@example.com,+57 320 555 8899,2026-06-20
+C012,laura@example.com,+57 320 555 8877,2026-06-18

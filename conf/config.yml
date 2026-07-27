@@ -1,0 +1,19 @@
+region_default: CO
+regiones_permitidas: [CO, MX, US, ES, AR, CL, PE]
+tipos_contactables: [MOBILE, FIXED_LINE_OR_MOBILE]
+idioma_geo: es
+dias_vigencia_consentimiento: 730
+max_telefonos_por_cliente: 3
+env_clave_hmac: PHONE_HMAC_KEY
+
+fuentes:
+  - nombre: crm
+    archivo: crm_clientes.csv
+    columna_id: cliente_id
+    columnas_tel: [telefono_movil, telefono_fijo]
+    prioridad: 1
+  - nombre: ecommerce
+    archivo: ecommerce_perfiles.csv
+    columna_id: cliente_id
+    columnas_tel: [celular_checkout]
+    prioridad: 2

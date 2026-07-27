@@ -1,0 +1,53 @@
+duenos_por_fuente:
+  crm: "Dirección de Red · M. Peñaranda"
+  ecommerce: "Producto Digital · J. Duarte"
+  contact_center: "Operaciones de Servicio · S. Bermúdez"
+  campanas: "Mercadeo · L. Aguirre"
+dueno_por_defecto: "Gobierno de Datos · C. Ríos"
+
+sla_dias:
+  critica: 1
+  alta: 5
+  media: 15
+  baja: 90
+
+reglas:
+  - id: caida_calidad_fuente
+    tipo: caida_fuente
+    severidad: alta
+    umbral: 0.05
+    dias_base: 56
+    min_corridas_base: 3
+
+  - id: calidad_fuente_bajo_minimo
+    tipo: piso_fuente
+    severidad: media
+    umbral: 0.85
+
+  - id: contactos_en_exclusion
+    tipo: metrica
+    metrica: registros_en_dnc
+    comparador: mayor
+    severidad: critica
+    umbral: 0
+    descripcion: "Teléfonos en lista de exclusión dentro del dataset publicado"
+    accion: "Verificar que ninguna campaña activa los haya incluido y reportar a cumplimiento."
+
+  - id: alcance_bajo_meta
+    tipo: kpi
+    kpi: alcance_contactable
+    severidad: media
+
+  - id: consentimiento_bajo_meta
+    tipo: kpi
+    kpi: consentimiento_vigente
+    severidad: media
+
+entregabilidad:
+  ventana_dias: 365
+  dudosos_para_sospechoso: 2
+
+observatorio:
+  ruta: data/observatorio
+  catalogo: conf/catalogo_kpi.yml
+  dias_tendencia: 28

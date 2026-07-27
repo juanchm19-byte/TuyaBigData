@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.zip
+build/
+reports/
+data/gold/
+data/observatorio/
+.ipynb_checkpoints/

@@ -1,0 +1,168 @@
+version_catalogo: "1.0.0"
+
+kpis:
+
+  - id: alcance_contactable
+    nombre: Alcance contactable
+    pregunta: ¿A qué porcentaje de clientes puedo contactar legalmente hoy?
+    bloque: alcance
+    unidad: porcentaje
+    direccion: mayor_mejor
+    meta: 0.65
+    dueno: Gerencia de Servicio al Cliente
+    metrica: alcance_contactable
+
+  - id: clientes_alcanzables
+    nombre: Clientes alcanzables
+    pregunta: ¿Cuántos clientes en términos absolutos?
+    bloque: alcance
+    unidad: clientes
+    direccion: mayor_mejor
+    meta: null
+    dueno: Gerencia de Servicio al Cliente
+    metrica: clientes_alcanzables
+
+  - id: brecha_alcance
+    nombre: Brecha contra la meta
+    pregunta: ¿Cuántos clientes me faltan para cumplir la meta del año?
+    bloque: alcance
+    unidad: clientes
+    direccion: menor_mejor
+    meta: 0
+    dueno: Gerencia de Servicio al Cliente
+    parametros:
+      meta_alcance: 0.65
+    expresion: |
+      SELECT greatest(
+               0,
+               ($meta_alcance - max(CASE WHEN metrica = 'alcance_contactable' THEN valor END))
+               * max(CASE WHEN metrica = 'clientes_base' THEN valor END)
+             ) AS valor
+      FROM v_metricas
+      WHERE ejecucion_id = $ejec
+
+  - id: cobertura_captura
+    nombre: Cobertura de captura
+    pregunta: ¿De cuántos clientes tengo siquiera un teléfono utilizable?
+    bloque: alcance
+    unidad: porcentaje
+    direccion: mayor_mejor
+    meta: 0.90
+    dueno: Dirección de Red
+    metrica: cobertura_clientes
+
+  - id: captura_limpia
+    nombre: Captura limpia
+    pregunta: ¿Qué porcentaje de lo capturado sirve?
+    bloque: captura
+    unidad: porcentaje
+    direccion: mayor_mejor
+    meta: 0.92
+    dueno: Gobierno de Datos
+    metrica: tasa_normalizacion
+
+  - id: captura_limpia_peor_fuente
+    nombre: Captura limpia de la peor fuente
+    pregunta: ¿Cuál es el eslabón más débil?
+    bloque: captura
+    unidad: porcentaje
+    direccion: mayor_mejor
+    meta: 0.85
+    dueno: Gobierno de Datos
+    expresion: |
+      SELECT min(captura_limpia) AS valor
+      FROM v_calidad_fuente
+      WHERE ejecucion_id = $ejec
+
+  - id: perdida_por_invalidos
+    nombre: Pérdida por captura inválida
+    pregunta: ¿Cuántos teléfonos se pierden por errores de captura?
+    bloque: captura
+    unidad: telefonos
+    direccion: menor_mejor
+    meta: null
+    dueno: Dirección de Red
+    expresion: |
+      SELECT coalesce(sum(invalidos), 0) AS valor
+      FROM v_calidad_fuente
+      WHERE ejecucion_id = $ejec
+
+  - id: duplicidad_identidad
+    nombre: Teléfonos compartidos entre clientes
+    pregunta: ¿Cuántos números aparecen en más de un cliente?
+    bloque: captura
+    unidad: telefonos
+    direccion: menor_mejor
+    meta: null
+    dueno: Gobierno de Datos
+    metrica: duplicidad_identidad
+
+  - id: consentimiento_vigente
+    nombre: Consentimiento vigente
+    pregunta: ¿Qué porcentaje tiene base legal al día?
+    bloque: cumplimiento
+    unidad: porcentaje
+    direccion: mayor_mejor
+    meta: 0.70
+    dueno: Gobierno de Datos
+    metrica: tasa_consentimiento_vigente
+
+  - id: caducidad_90d
+    nombre: Consentimientos que caducan en 90 días
+    pregunta: ¿Cuántos clientes perderé si no hago nada?
+    bloque: cumplimiento
+    unidad: telefonos
+    direccion: menor_mejor
+    meta: null
+    dueno: Gobierno de Datos
+    metrica: caducan_90d
+
+  - id: registros_en_dnc
+    nombre: Registros en lista de exclusión
+    pregunta: ¿Cuántos pidieron no ser contactados?
+    bloque: cumplimiento
+    unidad: telefonos
+    direccion: menor_mejor
+    meta: null
+    dueno: Cumplimiento
+    metrica: registros_en_dnc
+
+  - id: frescura_horas
+    nombre: Frescura del dato
+    pregunta: ¿Qué tan viejo es el dato que estoy mirando?
+    bloque: operacion
+    unidad: horas
+    direccion: menor_mejor
+    meta: 26
+    dueno: Ingeniería de Datos
+    expresion: |
+      SELECT date_diff('hour', max(publicado_utc), CAST($ahora AS TIMESTAMP)) AS valor
+      FROM v_ejecuciones
+
+  - id: cumplimiento_sla
+    nombre: Corridas dentro del SLA
+    pregunta: ¿El dataset llegó a tiempo este mes?
+    bloque: operacion
+    unidad: porcentaje
+    direccion: mayor_mejor
+    meta: 0.95
+    dueno: Ingeniería de Datos
+    expresion: |
+      SELECT count(DISTINCT fecha) / 30.0 AS valor
+      FROM v_ejecuciones
+      WHERE fecha > CAST($ahora AS TIMESTAMP) - INTERVAL 30 DAY
+
+  - id: costo_evitado
+    nombre: Costo evitado por no enviar a inválidos
+    pregunta: ¿Cuánto ahorra el filtro de calidad al mes?
+    bloque: valor
+    unidad: moneda
+    direccion: mayor_mejor
+    meta: null
+    dueno: Gerencia de Servicio al Cliente
+    parametros:
+      costo_mensaje: 45
+    expresion: |
+      SELECT coalesce(sum(invalidos), 0) * $costo_mensaje AS valor
+      FROM v_calidad_fuente
+      WHERE ejecucion_id = $ejec
